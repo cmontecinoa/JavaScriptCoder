@@ -20,6 +20,7 @@ class pedido {
     }
 }
 
+//Funcion para calculo del precio total, Precio per Capita * Cantidad, evaluación de descuento
 
 function valorServicio(tipoDeServicio, cantidadPersonas) {
     let valor = 0; //Reinicio de variable, por si acaso
@@ -77,7 +78,17 @@ botonFormulario.onclick = () => {
 
     let email = document.getElementById("email").value;
     let cantidadPersonas = parseInt(document.getElementById("cantidadDePersonas").value);
-    let tipoDeServicio = parseInt(document.getElementById("tipoDeServicio").value);
+    let tipoDeServicio = 0;
+
+    if (document.getElementById("tipoDeServicio").value == "Desayuno") {
+        tipoDeServicio = 1;
+    } else if (document.getElementById("tipoDeServicio").value == "Coffe Break") {
+        tipoDeServicio = 2;
+    } else if (document.getElementById("tipoDeServicio").value == "Matrimonio") {
+        tipoDeServicio = 3;
+    } else {
+        console.log("algo esta fallando");
+    }
 
 
     ingresarNuevoPedido(email, cantidadPersonas, tipoDeServicio);
@@ -99,20 +110,19 @@ botonFormulario.onclick = () => {
 
 
 
-const boton = document.getElementById("botonConsulta");
-const consultaDOM = document.getElementById("buscaPedido");
+const botonConsulta = document.getElementById("botonConsulta");
 const resultado = document.getElementById("resultado");
-let pedidoEncontrado = [];
-let existePedido = false;
+// let pedidoEncontrado = [];
+// let existePedido = false;
 
-function buscarPedido() {
+function buscarPedido(consultaDOM) {
 
     //Testers 
     largoLista = listaPedidos.length;
     console.log("La cantidad total de pedidos en la memoria es de: ");
     console.log(largoLista);
 
-    for (var i = 0; i < largoLista; i++) { //Pendiente cambio a for of...
+    for (let i = 0; i < largoLista; i++) { //Pendiente cambio a for of...
 
         console.log("Información de la cotización n°", listaPedidos[i].numPedido);
         console.log("La cantidad de personas:", listaPedidos[i].cantidad);
@@ -124,22 +134,30 @@ function buscarPedido() {
     }
 
     //Funcionalidad de la funcion
+    let existePedido = listaPedidos.some(pedido => pedido.numPedido == consultaDOM);
+    // console.log(pedidoEncontrado);
+    // console.log(existePedido);
+    // console.log(consultaDOM);
+    return existePedido;
 
-    pedidoEncontrado = listaPedidos.find(pedido => pedido.numPedido == parseInt(consultaDOM.value));
-    existePedido = listaPedidos.some(pedido => pedido.numPedido == parseInt(consultaDOM.value));
-    return [pedidoEncontrado, existePedido];
 }
 
 
-boton.onclick = () => {
+botonConsulta.onclick = () => {
+    let consultaDOM = parseInt(document.getElementById("buscaPedido").value);
+    console.log(consultaDOM);
+    largoLista = listaPedidos.length;
 
-    if (consultaDOM.value > 0 && consultaDOM.value <= largoLista) {
-        buscarPedido();
+    if (consultaDOM > 0 && consultaDOM <= largoLista) {
+        buscarPedido(consultaDOM);
 
-        if (existePedido) {
-            let j = parseInt(consultaDOM.value) - 1;
+        if (buscarPedido(consultaDOM)) {
+            let pedidoEncontrado = listaPedidos.find(pedido => pedido.numPedido == consultaDOM);
+            console.log(pedidoEncontrado);
 
-            ((existePedido) && (pedidoEncontrado)) ? resultado.innerHTML += `<hr><p> Su pedido es el siguiente: N° de pedido:${listaPedidos[j].numPedido}</p>
+            let j = consultaDOM - 1;
+
+            (pedidoEncontrado) ? resultado.innerHTML += `<hr><p> Su pedido es el siguiente: N° de pedido:${listaPedidos[j].numPedido}</p>
     <br> <p> Cantidad de personas: ${listaPedidos[j].cantidad} </p>
     <br> <p> Tipo de Servicio: ${listaPedidos[j].servicio} </p>
     <br> <p> Cantidad de personas: ${listaPedidos[j].costo} </p>
@@ -147,6 +165,9 @@ boton.onclick = () => {
         }
     } else {
         alert("El numero de la consulta del pedido no corresponde a ningún numero en sistema"); // Se mejorará con DOM
+        console.log(pedidoEncontrado);
+        console.log(existePedido);
+        console.log(consultaDOM);
     }
 
 }
