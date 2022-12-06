@@ -48,7 +48,7 @@ botonConsulta.onclick = () => {
             (pedidoEncontrado) ? resultado.innerHTML += `<hr><p> Su pedido es el siguiente: N° de pedido:${listaPedidos[j].numPedido}</p>
              <br> <p> Cantidad de personas: ${listaPedidos[j].cantidad} </p>
              <br> <p> Tipo de Servicio: ${listaPedidos[j].servicio} </p>
-             <br> <p> Cantidad de personas: ${listaPedidos[j].costo} </p>`: resultado.innerHTML += "<hr>Su pedido no ha sido encontrado en la memoria";
+             <br> <p> Precio del Servicio: ${listaPedidos[j].costo} </p>`: resultado.innerHTML += "<hr>Su pedido no ha sido encontrado en la memoria";
         }
     } else {
         alert("El numero de la consulta del pedido no corresponde a ningún numero en sistema"); // Se mejorará con DOM

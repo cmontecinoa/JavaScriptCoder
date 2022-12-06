@@ -1,6 +1,5 @@
 //Cotización en servicios de catering, descuento por cantidad de comensales, variando así los precios fijos del servicio.
 let valor = 0;
-// let numeroPedido = 0;
 let largoLista = 0;
 let numeroPedido = parseInt(localStorage.getItem("contador"));
 
