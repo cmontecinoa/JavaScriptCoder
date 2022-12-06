@@ -1,13 +1,13 @@
 //Cotización en servicios de catering, descuento por cantidad de comensales, variando así los precios fijos del servicio.
 let valor = 0;
-let numeroPedido = 0;
+// let numeroPedido = 0;
 let largoLista = 0;
-const listaPedidos = []; //Array vacío
+let numeroPedido = parseInt(localStorage.getItem("contador"));
 
-//Se aplica el 10% multiplicado por 0.9
-function aplicarDescuento(x) {
-    return x * 0.9;
+if (JSON.parse(localStorage.getItem("contador") == undefined)) {
+    numeroPedido = 1;
 }
+
 
 //Declaración de clase para objetos pedido
 class pedido {
@@ -19,6 +19,34 @@ class pedido {
         this.costo = costo;
     }
 }
+
+
+const listaPedidos = []; //Array vacío para llenar con parse
+
+
+//Check si hay datos en itineración
+const iterable = (localStorage.getItem("itineracion") == 'true') ? true : false
+
+
+const pedidosAlmacenados = JSON.parse(localStorage.getItem("listaPedidosGuardada"));
+
+if (iterable) {
+
+    for (const objeto of pedidosAlmacenados) {
+        listaPedidos.push(objeto);
+    }
+
+}
+
+
+
+
+//Se aplica el 10% multiplicado por 0.9
+function aplicarDescuento(x) {
+    return x * 0.9;
+}
+
+
 
 //Funcion para calculo del precio total, Precio per Capita * Cantidad, evaluación de descuento
 
@@ -68,9 +96,10 @@ const botonFormulario = document.getElementById("botonFormulario");
 
 botonFormulario.onclick = () => {
 
+    // numeroPedido = numeroPedido++;
+
     function ingresarNuevoPedido() {
         let precioDeServicio = valorServicio(tipoDeServicio, cantidadPersonas);
-        numeroPedido = numeroPedido + 1;
         let nuevoPedido = new pedido(numeroPedido, email, cantidadPersonas, tipoDeServicio, precioDeServicio);
         listaPedidos.push(nuevoPedido);
         console.log("done!")
@@ -96,13 +125,14 @@ botonFormulario.onclick = () => {
     const guardarLocal = (clave, valor) => {
         localStorage.setItem(clave, valor)
     };
+
     guardarLocal("listaPedidosGuardada", JSON.stringify(listaPedidos));
+    localStorage.setItem("itineracion", true);
+    localStorage.setItem("contador", numeroPedido++);
+
 
     console.log("\n");
     console.table(listaPedidos);
-    console.log("\n");
     console.log(listaPedidos);
 
 }
-
-
